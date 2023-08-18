@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
@@ -9,10 +8,7 @@ const handler = async(req, res) => {
     return;
   }
 
-  console.log(req.body);
   const { data } = req.body; 
-  console.log(data)
-
   let response;
   try {
     response = await getUserIfExistsInDb(data)
@@ -29,16 +25,11 @@ const handler = async(req, res) => {
   } finally {
     await prisma.$disconnect()
   }
-
-  console.log(response)
-  
 }
-
-export default handler; 
 
 const getUserIfExistsInDb = async (data) => {
   const user = await prisma.user.findFirst({ where: { name: data.name } });
-
+  
   return user;
 }
 
@@ -49,8 +40,8 @@ const saveUserToDatabase = async (data) => {
       money: 10000,
     },
   });
-  console.log(user);
-
+  
   return user;
 }
 
+export default handler; 
