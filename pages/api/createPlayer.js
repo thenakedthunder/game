@@ -6,12 +6,10 @@ const handler = async(req, res) => {
     return;
   }
   
-  console.log(req)
   const { data } = req.body; 
   let response;
   try {
-    console.log(data)
-    response = await getUserIfExistsInDb(data.name)
+    response = await getUserIfExistsInDb(data.name);
     
     if (response) {
       res.status(200).json(response)
