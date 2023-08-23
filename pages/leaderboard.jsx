@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
-const LeaderBoard = (props) => {
+const LeaderBoard = () => {
   const [players, setPlayers] = useState([]);
+
+  const orderPlayersByMoney = (players) => players.sort(playerComparer);
 
   useEffect(() => {
     const fetchData = async () => {
       const apiResult = await callAPI();
       
-      setPlayers(apiResult);
+      setPlayers(orderPlayersByMoney(apiResult));
     };
   
     fetchData()}, []
@@ -24,10 +26,19 @@ const LeaderBoard = (props) => {
     }
   };
 
+  const playerComparer = (a, b) => {
+    if(a.money < b.money) {
+      return 1;
+    } else if(a.money > b.money) {
+      return -1;
+    } 
+    return 0;
+  }
+
   return (
     <>
       {players.map((player, index) =>
-        <p key={index}>{`player: ${player.name}, money: ${player.money}`}</p>
+        <p key={index}>{`${index + 1}. player: ${player.name}, money: ${player.money}`}</p>
       )}
     </>
   );
