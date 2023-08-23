@@ -19,6 +19,15 @@ export const saveUserToDatabase = async (name) => {
   return user;
 }
 
+export const updateUserMoney = async (name, money) => {
+  const user = await prisma.user.update({
+    where: { name: name },
+    data: { money: money },
+  })
+
+  return user;
+}
+
 export const disconnectDb = async () => {
   prisma.$disconnect();
 }
