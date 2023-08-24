@@ -1,24 +1,56 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Game = () => {
   const router = useRouter();
 
   const [stake, setStake] = useState(0);
-  const [money, setMoney] = useState(Number(router.query.money));
+  const [money, setMoney] = useState(0);
   const [betResult, setBetResult] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState('true')
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const apiResult = await getMoneyFromAPI();
+      
+      setMoney(apiResult);
+    };
+  
+    fetchData()}, []
+  );
+
+  const getMoneyFromAPI = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/getPlayerMoney?name=${userName}`);
+      const data = await res.json();
+
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const userName = router.query.name;
 
   const handleChange = event => {
+    const numberInput = event.target.value;
+
+    if(numberInput > money) {
+      setBetResult('You cannot bet more than what you have and cannot get credit for gambling (at least not from us)');
+      setIsButtonDisabled(true);
+      return;
+    }
+
+    setBetResult('');
+    setIsButtonDisabled(numberInput > 0 ? false : true);
     setStake(Number(event.target.value));
   };
-  
+
   const rollTheWheel = async () => {
     const randomNumberBetweenZeroAndTwo = Math.floor(Math.random() * 3);
 
     let moneyLeft = money;
-    switch(randomNumberBetweenZeroAndTwo) {
+    switch (randomNumberBetweenZeroAndTwo) {
       case 0:
         setBetResult("Bankrupt!");
         moneyLeft = money - stake;
@@ -34,7 +66,7 @@ const Game = () => {
     }
 
     if (moneyLeft !== null) {
-      router.push({pathname: '/game', query: { name: userName, money: moneyLeft}});
+      router.push({ pathname: '/game', query: { name: userName, money: moneyLeft } });
       await updateMoneyInDatabase(userName, moneyLeft);
     }
   };
@@ -50,7 +82,7 @@ const Game = () => {
           'Content-type': 'application/json; charset=UTF-8',
         }
       });
-  
+
       const data = await res.json();
       setMoney(data.money);
     } catch (err) {
@@ -60,16 +92,21 @@ const Game = () => {
 
   return (
     <>
-    <p>{`player name: ${userName}`}</p>
-    <p>{`current money: ${money}`}</p>
-    <div>
-      <p>Way of betting:</p>
-      <input type="number" min="1" max={money} onChange={handleChange}/>
-    </div>
-    <button onClick={rollTheWheel}>Roll the wheel</button>
-    <p>{betResult}</p>
+      <p>{`player name: ${userName}`}</p>
+      <p>{`current money: ${money}`}</p>
+      <div>
+        <p>Way of betting:</p>
+        <input type="number" min="1" max={money} onChange={handleChange} />
+      </div>
+      <button 
+        onClick={rollTheWheel}
+        disabled={isButtonDisabled}
+      >
+        Roll the wheel
+      </button>
+      <p>{betResult}</p>
     </>
   );
-} 
+}
 
 export default Game;

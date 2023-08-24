@@ -28,6 +28,12 @@ export const updateUserMoney = async (name, money) => {
   return user;
 }
 
+export const getUserMoneyFromDb = async (name) => {
+  const user = await getUserIfExistsInDb(name);
+
+  return user.money;
+}
+
 export const disconnectDb = async () => {
   prisma.$disconnect();
 }

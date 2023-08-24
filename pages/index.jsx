@@ -22,8 +22,7 @@ const Home = () => {
       });
 
       const data = await res.json();
-
-      router.push({pathname: '/game', query: { name: data.name, money: data.money}})
+      router.push({pathname: '/game', query: { name: data.name }});
     } catch (err) {
       console.log(err);
     }
