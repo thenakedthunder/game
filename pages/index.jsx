@@ -11,7 +11,7 @@ const Home = () => {
 
   const handleClick = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/createPlayer`, {
+      const res = await fetch(`api/createPlayer`, {
         method: 'POST',
         body: JSON.stringify({
           data:{name:username}, 

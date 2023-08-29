@@ -21,7 +21,7 @@ const Game = () => {
 
   const getMoneyFromAPI = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/getPlayerMoney?name=${userName}`);
+      const res = await fetch(`api/getPlayerMoney?name=${userName}`);
       const data = await res.json();
 
       return data;
@@ -73,7 +73,7 @@ const Game = () => {
 
   async function updateMoneyInDatabase(userName, moneyLeft) {
     try {
-      const res = await fetch(`http://localhost:3000/api/updateMoney`, {
+      const res = await fetch(`api/updateMoney`, {
         method: 'PUT',
         body: JSON.stringify({
           data: { name: userName, money: moneyLeft },

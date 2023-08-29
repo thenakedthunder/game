@@ -17,7 +17,7 @@ const LeaderBoard = () => {
 
   const callAPI = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/getPlayers`);
+      const res = await fetch(`api/getPlayers`);
       const data = await res.json();
 
       return data;
