@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 const LeaderBoard = () => {
   const [players, setPlayers] = useState([]);
 
-  const orderPlayersByMoney = (players) => players.sort(playerComparer);
+  const orderPlayersByMoney = (players) => {
+    if (!players) {
+      return [];
+    }
+    
+    players.sort(playerComparer);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
