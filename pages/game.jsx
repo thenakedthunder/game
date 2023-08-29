@@ -66,7 +66,7 @@ const Game = () => {
     }
 
     if (moneyLeft !== null) {
-      router.push({ pathname: '/game', query: { name: userName, money: moneyLeft } });
+      router.push({ pathname: '/game', query: { name: userName } });
       await updateMoneyInDatabase(userName, moneyLeft);
     }
   };
