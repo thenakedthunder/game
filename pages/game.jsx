@@ -9,6 +9,8 @@ const Game = () => {
   const [betResult, setBetResult] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState('true')
 
+  const userName = router.query.name;
+
   useEffect(() => {
     const fetchData = async () => {
       const apiResult = await getMoneyFromAPI();
@@ -29,8 +31,6 @@ const Game = () => {
       console.log(err);
     }
   };
-
-  const userName = router.query.name;
 
   const handleChange = event => {
     const numberInput = event.target.value;

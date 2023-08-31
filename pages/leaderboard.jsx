@@ -3,17 +3,9 @@ import { useEffect, useState } from "react";
 const LeaderBoard = () => {
   const [players, setPlayers] = useState([]);
 
-  const orderPlayersByMoney = (players) => {
-    if (!players) {
-      return [];
-    }
-    
-    players.sort(playerComparer);
-  }
-
   useEffect(() => {
     const fetchData = async () => {
-      const apiResult = await callAPI();
+      const apiResult = await getPlayersFromAPI();
       
       setPlayers(orderPlayersByMoney(apiResult));
     };
@@ -21,7 +13,7 @@ const LeaderBoard = () => {
     fetchData()}, []
   );
 
-  const callAPI = async () => {
+  const getPlayersFromAPI = async () => {
     try {
       const res = await fetch(`api/getPlayers`);
       const data = await res.json();
@@ -31,6 +23,14 @@ const LeaderBoard = () => {
       console.log(err);
     }
   };
+
+  const orderPlayersByMoney = (players) => {
+    if (!players) {
+      return [];
+    }
+    
+    players.sort(playerComparer);
+  }
 
   const playerComparer = (a, b) => {
     if(a.money < b.money) {
